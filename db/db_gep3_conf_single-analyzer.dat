@@ -67,7 +67,8 @@ RO_angle_ft 0.0 45.0 0.0 -45.0 -30.0 30.0 -30.0 30.0 -30.0 30.0 -30.0 30.0 0.0 9
 triggeroffset_ft 124.3 124.7 125.2 125.6 126.1 126.5 126.9 126.9 126.9 126.9 127.4 127.4 127.4 127.4 
 gain_ft 20.
 #zero suppression threshold for GEMs in ADC channels
-ZsupThr_ft 240.
+#ZsupThr_ft 240.
+ZsupThr_ft 0.
 #common mode value/array for GEMs in ADC channels
 commonmode_array_ft 1500.
 

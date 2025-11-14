@@ -8,7 +8,9 @@ using namespace std;
 //
 SBSDigGEMPlane::SBSDigGEMPlane() :
   fLayer(0), fNStrips(3840), fNSamples(6), fStripThr(100), fXoffset(0), fROangle(0)
-{
+{  
+  SetPlaneStripPed();
+  SetPlaneAPVCM();
 }
 
 SBSDigGEMPlane::SBSDigGEMPlane(short layer, short mod, int nstrips, int nsamples, double thr, double offset, double roangle) :
