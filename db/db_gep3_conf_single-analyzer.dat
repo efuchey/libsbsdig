@@ -71,6 +71,12 @@ gain_ft 20.
 ZsupThr_ft 0.
 #common mode value/array for GEMs in ADC channels
 commonmode_array_ft 1500.
+do_pedcm_ft 1
+pedfile_ft ft_pedout_peddat.dat
+cmfile_ft ft_cmout_peddat.dat
+do_online_cm_ft 0 #Apply online CM correction.
+do_online_zs_ft 0 #Apply online zero-suppresion.
+online_zs_thr_nsigma_ft 3.0 #online zero-suppression threshold.
 
 # number of planes/modules/readout
 NPlanes_fpp1 64 

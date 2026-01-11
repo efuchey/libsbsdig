@@ -2,15 +2,21 @@
 #define SBSDIGGEMDET_H
 
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <vector>
 #include <map>
+#include "TObjString.h"
 #include "SBSDigGEMPlane.h"
+
+using trackerpedmap = std::map<int, pedmap>;
+using trackercmmap = std::map<int, cmmap>;
 
 //________________________________
 class SBSDigGEMDet {
  public:
   SBSDigGEMDet();
-  SBSDigGEMDet(UShort_t uinqueid, UInt_t nplanes, int* layer, int* nstrips, double* offset, double* roangle, int nsamp, double zsup_thr);
+  SBSDigGEMDet(UShort_t uinqueid, UInt_t nplanes, int* layer, int* nstrips, double* offset, double* roangle, int nsamp, double zsup_thr, bool do_ped_cm = false, std::string pedfile = "ped.dat", std::string cmfile = "cm.dat");
   virtual ~SBSDigGEMDet();
   void Clear();
 
@@ -27,6 +33,7 @@ class SBSDigGEMDet {
     double xout;
     double yout;
     double zout;
+    int mid;
   };
 
   std::vector<gemhit> fGEMhits;
@@ -38,6 +45,10 @@ class SBSDigGEMDet {
   std::vector<Double_t> fZLayer;
   //std::map<int, SBSDigGEMPlane> GEMPlanes;
   std::vector<SBSDigGEMPlane> GEMPlanes;
+
+  //containers to store ped and cm values for the tracker.
+  trackerpedmap fTrackerPedMap;
+  trackercmmap fTrackerCommonModeMap;
 };
 
 #endif

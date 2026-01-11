@@ -3,10 +3,26 @@
 
 #include <iostream>
 #include <vector>
+#include <array>
 #include <map>
 #include <TROOT.h>
 //#include "TH1D.h"
 #include "TRandom3.h"
+
+struct Pedestal {
+  double mean{};
+  double rms{};
+};
+
+struct CommonMode {
+  double mean{};
+  double sigma{};
+};
+
+using pedmap = std::map<int, Pedestal>; // Map ped mean and rms value to each strip number.
+using cmmap = std::map<int, CommonMode>; // Map CM mean and sigma values to each APV number.
+
+constexpr int fNChanAPV {128};
 
 class SBSDigGEMPlane {
  public:
@@ -23,7 +39,7 @@ class SBSDigGEMPlane {
   Double_t Xoffset(){return fXoffset;};
   Double_t ROangle(){return fROangle;};
   Int_t GetNStrips(){return fNStrips;};
-  Short_t GetADC(int strip, int samp){return fStripADC[strip*fNSamples+samp];};
+  Short_t GetADC(int strip, int samp){return  fStripADC[strip*fNSamples+samp];};
   Int_t GetADCSum(int strip){return fStripADCsum[strip];};
   void SetADC(int strip, int samp, int adc){
     if(strip<fNStrips){
@@ -39,53 +55,68 @@ class SBSDigGEMPlane {
     //printf("strip = %d / %d, sample %d /%d \n", strip, fNStrips, samp, fNSamples);
     //}
   };
-
-  void SetPlaneStripPed(){ // This function will set the pedestal mean and RMS for each strip in the GEM plane.
-
-    for (int istrip=0; istrip<fNStrips; istrip++){
-
-      fStripPedOffset[istrip] = R->Gaus(0,50.); //using some hard-coded values here just for testing.
-      fStripPedRMS[istrip] = R->Gaus(0, 9.);
+  void SetGoodADC(int strip, int samp, int adc){
+    if(strip<fNStrips){
+      fStripMipADC[strip*fNSamples+samp] = adc;
     }
   };
-
-  void SetPlaneAPVCM(){  // This function will set CM mean and std.dev values for each APV in the GEM plane.
-
-    for (int istrip=0; istrip<fNStrips; istrip++){
-
-      if ( istrip%128==0 ){
-        int iAPV = istrip/128;
-        fAPVCMMean[iAPV] = R->Gaus(1500, 200);
-        fAPVCMSigma[iAPV] = 20;
-      }
+  void AddGoodADC(int strip, int samp, int adc){
+    if(strip<fNStrips){
+      fStripMipADC[strip*fNSamples+samp]+=adc;      
     }
   };
+  Short_t GetGoodADC(int strip, int samp){ return fStripMipADC[strip*fNSamples+samp]; };
 
-  Double_t GetStripPedMean(int strip) {return fStripPedOffset[strip];};
-  Double_t GetStripPedRMS(int strip) {return fStripPedRMS[strip];};
-  Double_t GetAPVCMMean(int apv) {return fAPVCMMean[apv];};
-  Double_t GetAPVCMSigma(int apv) {return fAPVCMSigma[apv];};
-  
+  void SetPlaneStripPed(const pedmap& PedestalMap){ // This function will set the pedestal mean and RMS for each strip in the GEM plane.
+    fPedestalMap = PedestalMap;
+  };
+
+  void SetPlaneAPVCM(const cmmap& CommonmodeMap){  // This function will set CM mean and std.dev values for each APV in the GEM plane.
+    fCommonmodeMap = CommonmodeMap;    
+  };
+
+  Double_t GetStripPedMean(int strip) {return fPedestalMap[strip].mean;};
+  Double_t GetStripPedRMS(int strip) {return fPedestalMap[strip].rms;};
+  Double_t GetAPVCMMean(int apv) {return fCommonmodeMap[apv].mean;};
+  Double_t GetAPVCMSigma(int apv) {return fCommonmodeMap[apv].sigma;};
+
+  void DoPedSub();
+  double GetOnlineCommonMode(const std::array <int,fNChanAPV>&, int); // Danning method online version CM calculation.
+  void ApplyOnlineCMCorr(); // Implement CM correction to digitized data.
+  void ApplyOnlineZS(const double zs_thr_nsigma); // Implement zero suppression. Only to be done after ApplyOnlineCMCorr().
+
  private:
   // ADC sampled value of strip array of each axis
   Short_t fLayer;
   Short_t fModule;
   Int_t fNStrips;
   Int_t fNSamples;
+  Int_t fNAPVs; // Number of APV cards in the GEM plane.
   Double_t fStripThr;//threshold for ADC sum
   Int_t* fStripADCsum;
   Short_t* fStripADC;
+  Short_t* fStripPedSubADC; // Pedestal subtracted ADC of the strip -> For online CM calcualtions.
+  Short_t* fStripCMCorrADC; // Online Danning method CM corrected ADC of the strip -> For online CM calculations.
+  Short_t* fStripMipADC;    // ADC contribution from the MIP avalanche -> To be used as MC truth infomation.
+  
   double fdX;
   double fXoffset;
   double fROangle;
   //ClassDef(SBSDigGEMPlane, 1)
 
   // Ped and CM values.
-  TRandom3* R = new TRandom3(0); //Random number generation for ped and CM testing purposes.
-  Double_t* fStripPedOffset;
-  Double_t* fStripPedRMS;
-  Double_t* fAPVCMMean;
-  Double_t* fAPVCMSigma;
+  //TRandom3* R = new TRandom3(0); //Random number generation for ped and CM testing purposes.
+  // Double_t* fStripPedOffset;
+  // Double_t* fStripPedRMS;
+  // Double_t* fAPVCMMean;
+  // Double_t* fAPVCMSigma;
+  pedmap fPedestalMap;
+  cmmap fCommonmodeMap;
+
+  std::map <std::pair<int,int>, int> fOnlineCMbyAPVbySamp;
+  double fCommonModeRange_nsigma = 5.0;
+  double fCommonModeDanningMethod_NsigmaCut = 3.0; // As set in SBSGEMModule.cxx as the default.
+  int fCommonModeMinStripsInRange = 25;
   
 };
 #endif

@@ -417,6 +417,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Earm_BBGEM.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Earm_BBGEM.yout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset();
 	  hit.zout = T->Earm_BBGEM.zout->at(k)-gemdets[idet]->fZLayer[T->Earm_BBGEM.plane->at(k)-1];//+0.8031825;
+	  hit.mid = T->Earm_BBGEM.mid->at(k);
 	  //cout << mod << " " << hit.zin << " " << hit.zout << endl;
 	  gemdets[idet]->fGEMhits.push_back(hit);
 	}//end if(sumedep>0)
@@ -473,6 +474,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Harm_SBSGEM.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Harm_SBSGEM.yout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset();
 	  hit.zout = T->Harm_SBSGEM.zout->at(k)-gemdets[idet]->fZLayer[T->Harm_SBSGEM.plane->at(k)-1];//+0.8031825;
+	  hit.mid = T->Harm_SBSGEM.mid->at(k);
 	  //cout << mod << " " << hit.zin << " " << hit.zout << endl;
 	  gemdets[idet]->fGEMhits.push_back(hit);
 	}//end if(sumedep>0)
@@ -520,6 +522,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Harm_FT.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Harm_FT.yout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset();
 	  hit.zout = T->Harm_FT.zout->at(k)-gemdets[idet]->fZLayer[T->Harm_FT.plane->at(k)-1];//+1.7886925;
+	  hit.mid = T->Harm_FT.mid->at(k);
 	  //cout << T->Harm_FT.plane->at(k) << " " << T->Harm_FT.zin->at(k) << " " << gemdets[idet]->fZLayer[T->Harm_FT.plane->at(k)-1] << " " << mod << " " << hit.zin << " " << hit.zout << endl;
 	  gemdets[idet]->fGEMhits.push_back(hit);
 	}//end if(sumedep>0)
@@ -566,6 +569,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Harm_FPP1.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Harm_FPP1.yout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset();
 	  hit.zout = T->Harm_FPP1.zout->at(k)-gemdets[idet]->fZLayer[T->Harm_FPP1.plane->at(k)-1];//+1.7886925;
+	  hit.mid = T->Harm_FPP1.mid->at(k);
 	  //cout << mod << " " << hit.zin << " " << hit.zout << endl;
 	  gemdets[idet]->fGEMhits.push_back(hit);
 	}//end if(sumedep>0)
@@ -613,6 +617,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Harm_FPP2.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Harm_FPP2.yout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset();
 	  hit.zout = T->Harm_FPP2.zout->at(k)-gemdets[idet]->fZLayer[T->Harm_FPP2.plane->at(k)-1];//+1.7886925;
+	  hit.mid = T->Harm_FPP2.mid->at(k);
 	  //cout << mod << " " << hit.zin << " " << hit.zout << endl;
 
 	  gemdets[idet]->fGEMhits.push_back(hit);
@@ -652,6 +657,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Harm_CEPolFront.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Harm_CEPolFront.yout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset();
 	  hit.zout = T->Harm_CEPolFront.zout->at(k)-gemdets[idet]->fZLayer[T->Harm_CEPolFront.plane->at(k)-1];//+0.8031825;
+	  hit.mid = T->Harm_CEPolFront.mid->at(k);
 	  gemdets[idet]->fGEMhits.push_back(hit);
 //	    cout<<" Harm_CEPolFront  "<<"  zin  "<<hit.zin<<"  zout  "<<hit.zout<<" plane "<<T->Harm_CEPolFront.plane->at(k)<<endl;
 	}//end if(sumedep>0)
@@ -692,6 +698,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Harm_CEPolRear.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Harm_CEPolRear.yout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset();
 	  hit.zout = T->Harm_CEPolRear.zout->at(k)-gemdets[idet]->fZLayer[T->Harm_CEPolRear.plane->at(k)-1];//+0.8031825;
+	  hit.mid = T->Harm_CEPolRear.mid->at(k);
 	  gemdets[idet]->fGEMhits.push_back(hit);
 	      //cout<<" Harm_CEPolRear  "<<"  zin  "<<hit.zin<<"  zout  "<<hit.zout<<endl;
 
@@ -731,6 +738,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Harm_PrPolGEMBeamSide.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Harm_PrPolGEMBeamSide.zout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset()-1.36;
 	  hit.zout = T->Harm_PrPolGEMBeamSide.yout->at(k)-gemdets[idet]->fZLayer[T->Harm_PrPolGEMBeamSide.plane->at(k)-1];//+0.8031825;
+	  hit.mid = T->Harm_PrPolGEMBeamSide.mid->at(k);
 	  gemdets[idet]->fGEMhits.push_back(hit);
 //cout<<" Harm_PrPolGEMBeamSide  "<<"  zin  "<<hit.zin<<"  zout  "<<hit.zout<<" plane "<<T->Harm_PrPolGEMBeamSide.plane->at(k)<<endl;
 	}//end if(sumedep>0)
@@ -772,6 +780,7 @@ bool UnfoldData(g4sbs_tree* T, double theta_sbs, double d_hcal, TRandom3* R,
 	  hit.xout = T->Harm_PrPolGEMFarSide.xout->at(k)-gemdets[idet]->GEMPlanes[mod*2].Xoffset();
 	  hit.yout = T->Harm_PrPolGEMFarSide.zout->at(k)-gemdets[idet]->GEMPlanes[mod*2+1].Xoffset();
 	  hit.zout = -(T->Harm_PrPolGEMFarSide.yout->at(k)-gemdets[idet]->fZLayer[T->Harm_PrPolGEMFarSide.plane->at(k)-1]);
+	  hit.mid = T->Harm_PrPolGEMFarSide.mid->at(k);
 	  gemdets[idet]->fGEMhits.push_back(hit);
 	  //cout<<" Harm_PrPolGEMFarSide  "<<"  zin  "<< hit.zin <<"  zout   "<< hit.zout <<endl;
 	}//end if(sumedep>0)

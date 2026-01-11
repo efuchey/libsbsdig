@@ -26,12 +26,13 @@ class SBSDigGEMSimDig {
  public:
   //Constructor and destructor
   SBSDigGEMSimDig();
-  SBSDigGEMSimDig(int nchambers, double* trigoffset, double* gain, double zsup_thr, int napv = 0, double* commonmode_array = 0);
+  SBSDigGEMSimDig(int nchambers, double* trigoffset, double* gain, double zsup_thr, int napv = 0, double* commonmode_array = 0, bool do_variable_pedcm = false, bool do_online_cm = false, bool do_online_zs = false, double online_zs_thr_nsigma = 3.0);
   virtual ~SBSDigGEMSimDig();
   void Print();
   
   Int_t Digitize (SBSDigGEMDet* gemdet, TRandom3* R, bool bkgdonly = false);//, gmn_tree* T);
   //void CheckOut(SBSDigGEMDet* gemdet, TRandom3* R, gmn_tree* T);
+  void FillOutputTreeVectors(SBSDigGEMDet* gemdet, const int i /*plane#*/, const int j/*strp#*/, const int uniqueid, g4sbs_tree* T);
   void CheckOut(SBSDigGEMDet* gemdet, const int uniqueid, TRandom3* R, g4sbs_tree* T, bool sigonly = false);
   //void FillBBGEMTree(const SBSDigGEMPlane pl, gmn_tree* T, int j);
   void write_histos();
@@ -52,14 +53,16 @@ class SBSDigGEMSimDig {
 		TRandom3* R,
 		const TVector3& xi,
 		const TVector3& xo,
-		const Double_t t0);
+		const Double_t t0,
+    const Int_t mid = -1);
   
   void AvaModel_2(const int ic, //module number
 		  SBSDigGEMDet* gemdet,
 		  TRandom3* R,
 		  const TVector3& xi,
 		  const TVector3& xo,
-		  const Double_t t0);
+		  const Double_t t0,
+      const Int_t mid = -1);
   
   void Integration_semiana(double roangle, 
 			    double xl, double xr, double yb, double yt, 
@@ -92,12 +95,22 @@ class SBSDigGEMSimDig {
 
   Double_t fAvaGain;
   Int_t fNSamples;
+  Int_t fNAPVChannels;
   
   //zero suppression and common mode
   Bool_t fDoZeroSup;
   Double_t fZeroSup;
   Bool_t fDoCommonMode;
   std::vector<Double_t> fCommonModeArray;
+
+  //New (Nov, 2025): Apply variable CM (apv card wise - per every 128 channels) and pedestal (channel wise).
+  Bool_t fDoVariablePedCM;
+
+  //New (Dec, 2025): 'Online' CM corrections and ZS. ADR.
+  Bool_t fDoOnlineCommonMode; // fDoVariablePedCM *MUST BE* true for online CM to take effect.
+  Bool_t fDoOnlineZeroSuppression; // Online CM *MUST BE* true for online ZS to take effect. 
+  Double_t fOnlineZSThrNsigma; 
+  
   
   Short_t ADCConvert(Double_t val, Double_t off, Double_t gain, Int_t bits);
   Double_t PulseShape(Double_t t, 
