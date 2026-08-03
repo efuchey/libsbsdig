@@ -10,6 +10,7 @@ refindex_ecal 1.6477
 NChan_ecal 1656
 gatewidth_ecal 200 
 gain_ecal 2.9e6
+nstages_ecal 10
 ped_ecal 300.0 
 pedsigma_ecal 3.0 
 trigoffset_ecal 22.4 
@@ -23,6 +24,7 @@ sigmapulse_ecal 40.0
 NChan_cdet 2352 
 gatewidth_cdet 100 
 gain_cdet 1.0e5
+nstages_cdet 10
 ped_cdet 500.0 
 pedsigma_cdet 3.0
 trigoffset_cdet 20.3
@@ -37,6 +39,7 @@ sigmapulse_cdet 1.6
 NChan_hcal 288
 gatewidth_hcal 200 
 gain_hcal 1.0e6
+nstages_hcal 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 12 12 12 12 8 8 8 8 12 12 12 12 
 ped_hcal 300.0 
 pedsigma_hcal 3.0
 trigoffset_hcal 34.5 
@@ -47,6 +50,7 @@ TDCbits_hcal 16
 FADC_ADCbits 12 
 FADC_sampsize 4.0 
 sigmapulse_hcal 40.0 
+zhitresp_hcal 5.242 11.39 10.41
 
 ## parameters for GEMs
 # number of planes/modules/readout
